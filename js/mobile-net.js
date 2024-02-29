@@ -1,3 +1,5 @@
+import axios from {axios};
+
 let model;
 async function loadModel() {
   console.log("model loading..");
@@ -96,70 +98,104 @@ function loadChart(label, data) {
 
 async function predButton() {
   console.log("model loading..");
+    console.log("Api called");
+ 
 
   if (model == undefined) {
-    alert("Please load the model first..");
+      alert("Please load the model first..");
+      return;
   }
   if (document.getElementById("predict-box").style.display == "none") {
-    alert("Please load an image using 'Demo Image' or 'Upload Image' button..");
+      alert("Please load an image using 'Demo Image' or 'Upload Image' button..");
+      return;
   }
-  console.log(model);
+
   let image = document.getElementById("test-image");
   let tensor = preprocessImage(image, modelName);
 
   let predictions = await model.predict(tensor).data();
   let results_all = Array.from(predictions)
-    .map(function (p, i) {
-      return {
-        probability: p,
-        className: TARGET_CLASSES[i],
-        index: i,
-      };
-    })
-    .sort(function (a, b) {
-      return b.probability - a.probability;
-    });
+      .map(function (p, i) {
+          return {
+              probability: p,
+              className: TARGET_CLASSES[i],
+              index: i,
+          };
+      })
+      .sort(function (a, b) {
+          return b.probability - a.probability;
+      });
 
   let results = results_all.slice(0, 3);
 
+  // Prepare data to send to the server
+  const data = {
+      predictions: results,
+      image: image.src // You may need to adjust this depending on how your server expects the image data
+  };
+
+  // Send a POST request to the server
+  fetch('http://localhost:5000/predictions', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+  })
+  .then(response => {
+      if (!response.ok) {
+          throw new Error('Failed to store predictions');
+      }
+      return response.json();
+  })
+  .then(responseData => {
+      console.log('Predictions stored successfully:', responseData);
+  })
+  .catch(error => {
+      console.error('Error storing predictions:', error);
+      alert('Failed to store predictions. Please try again later.');
+  });
+
+  // Update UI with predictions (same code as before)
   document.getElementById("predict-box").style.display = "block";
   document.getElementById("prediction").innerHTML =
-    "The predicted type of Skin Cancer is: <br><b>" +
-    results[0].className +
-    "</b>";
+      "The predicted type of Skin Cancer is: <br><b>" +
+      results[0].className +
+      "</b>";
 
   var ul = document.getElementById("predict-list");
   ul.innerHTML = "";
   results.forEach(function (p) {
-    console.log(
-      p.className + "(" + p.index + ")" + " " + p.probability.toFixed(6)
-    );
-    var li = document.createElement("LI");
-    li.innerHTML =
-      p.className + "(" + p.index + ")" + " " + p.probability.toFixed(6);
-    ul.appendChild(li);
+      console.log(
+          p.className + "(" + p.index + ")" + " " + p.probability.toFixed(6)
+      );
+      var li = document.createElement("LI");
+      li.innerHTML =
+          p.className + "(" + p.index + ")" + " " + p.probability.toFixed(6);
+      ul.appendChild(li);
   });
 
   // label = ["0", "1", "2", "3", "4", "5", "6"];
   label = [
-    "0: akiec",
-    "1: bcc",
-    "2: bkl",
-    "3: df",
-    "4: mel",
-    "5: nv",
-    "6: vasc",
+      "0: akiec",
+      "1: bcc",
+      "2: bkl",
+      "3: df",
+      "4: mel",
+      "5: nv",
+      "6: vasc",
   ];
   if (firstTime == 0) {
-    loadChart(label, predictions);
-    firstTime = 1;
+      loadChart(label, predictions);
+      firstTime = 1;
   } else {
-    chart.destroy();
-    loadChart(label, predictions);
+      chart.destroy();
+      loadChart(label, predictions);
   }
 
   document.getElementById("chart-box").style.display = "block";
 }
+
 
 function preprocessImage(image, modelName) {
   let tensor = tf.browser
