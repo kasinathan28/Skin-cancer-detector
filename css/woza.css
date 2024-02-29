@@ -6,10 +6,7 @@
   margin-top: 40px;
 }
 
-/* ul {
-	
-	padding: 15px;
-} */
+
 
 .space-letters {
   letter-spacing: 0.05em;
@@ -20,14 +17,13 @@
 }
 
 .dont-break-out {
-  /*These are technically the same but use both 
-	to ensure all browsers are supported*/
+ 
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
 
 .bground-color {
-  background-color: #f8f8f8; /* rgb(248,248,248) */
+  background-color: #f8f8f8;
 }
 
 p {
@@ -35,7 +31,7 @@ p {
 }
 
 .text-color {
-  color: #404040; /* rgb(64,64,64) */
+  color: #404040;
 }
 
 .logo h1 {
@@ -56,7 +52,7 @@ p {
 }
 
 a:hover {
-  color: #ff9999; /* rgb(0, 255, 191) */
+  color: #ff9999;
 }
 
 .test:hover {
@@ -64,11 +60,7 @@ a:hover {
   background-color: #ff0000;
 }
 
-/* li {
-	font-family: 'Roboto', Helvetica, sans-serif;
-	font-size: 13px;
-	padding-bottom: 15px;
-} */
+
 
 .news-font {
   font-size: 13px;
@@ -104,8 +96,7 @@ a {
 }
 
 .dont-break-out {
-  /*These are technically the same but use both 
-	to ensure all browsers are supported*/
+ 
   overflow-wrap: break-word;
   word-wrap: break-word;
 }
@@ -135,18 +126,14 @@ a {
   display: none;
 }
 
-/*
------------------
-MEDIA QUERIES
------------------
-*/
+
 
 @media only screen and (min-device-width: 1200px) {
-  /* Devices that are Laptops and Desktops */
-} /*Close Media Query*/
+ 
+}
 
 @media only screen and (max-width: 480px) and (orientation: portrait) {
-  /*Cellphone Screens in portrait*/
+ 
 
   .side-margin1 {
     margin-left: 0;
@@ -160,10 +147,10 @@ MEDIA QUERIES
   .mobile-bar {
     display: block;
   }
-} /*Close Media Query*/
+}
 
 @media only screen and (max-width: 480px) and (orientation: landscape) {
-  /*Cellphone Screens in portrait*/
+ 
 
   .side-margin1 {
     margin-left: 0;
@@ -177,4 +164,4 @@ MEDIA QUERIES
   .mobile-bar {
     display: block;
   }
-} /*Close Media Query*/
+}
